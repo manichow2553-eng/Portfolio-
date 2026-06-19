@@ -166,7 +166,7 @@
   }
   .hero-photo .placeholder-label{
     position:absolute; inset:0;
-    display:flex; align-items:center; justify-content:center;
+    display:none; align-items:center; justify-content:center;
     font-family: var(--mono); font-size: 10px; color: var(--grey); text-align:center; padding: 12px;
     line-height:1.5;
   }
@@ -380,14 +380,14 @@
           with your own one-breath pitch.</p>
       </div>
       <div class="hero-photo">
-        <!-- Replace this placeholder with: <img src="your-photo.jpg" alt="Pavan"> -->
+        <img src="assets/photo.jpg" alt="Pavan — portrait">
         <div class="placeholder-label">YOUR<br>PHOTO<br>HERE</div>
         <div class="corner"></div>
       </div>
     </div>
     <div class="meta-row">
       <div class="item">BASED IN<strong>Bengaluru, IN</strong></div>
-      <div class="item">EXPERIENCE<strong>6 years</strong></div>
+      <div class="item">EXPERIENCE<strong>4+ years</strong></div>
       <div class="item">FOCUS<strong>Dev · Design · UI</strong></div>
       <div class="item">STATUS<strong>Open to work</strong></div>
     </div>
@@ -508,6 +508,21 @@
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); } });
   }, { threshold: 0.15 });
   els.forEach(el => io.observe(el));
+
+  // Hero image fallback: show placeholder if image fails to load
+  (function(){
+    const heroImg = document.querySelector('.hero-photo img');
+    const placeholder = document.querySelector('.hero-photo .placeholder-label');
+    if(!heroImg) return;
+    heroImg.addEventListener('error', () => {
+      heroImg.style.display = 'none';
+      if(placeholder) placeholder.style.display = 'flex';
+    });
+    heroImg.addEventListener('load', () => {
+      if(placeholder) placeholder.style.display = 'none';
+      heroImg.style.display = 'block';
+    });
+  })();
 </script>
 
 </body>
