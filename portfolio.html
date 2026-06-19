@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pavan — Developer & Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #13110F;
+    --bone: #EDE7DD;
+    --bone-dim: #B8B2A4;
+    --signal: #FF5A1F;
+    --sage: #8A9A7E;
+    --grey: #5C5750;
+    --hairline: rgba(237,231,221,0.14);
+    --display: 'Archivo Black', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--ink);
+    color: var(--bone);
+    font-family: var(--body);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a{ color: inherit; text-decoration: none; }
+
+  /* Skip link for keyboard users */
+  .skip-link{
+    position:absolute; left:-9999px; top:0;
+    background:var(--signal); color:var(--ink); padding:10px 16px; z-index:100;
+    font-family:var(--mono); font-size:13px;
+  }
+  .skip-link:focus{ left:12px; top:12px; }
+
+  :focus-visible{
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+
+  /* ===== SPINE (signature element) ===== */
+  .spine{
+    position: fixed;
+    left: 0; top: 0;
+    width: 64px;
+    height: 100vh;
+    border-right: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 0;
+    z-index: 50;
+    background: var(--ink);
+  }
+  .spine .mark{
+    width: 28px; height: 28px;
+    border: 1.5px solid var(--signal);
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size: 10px; color: var(--signal);
+  }
+  .spine .name-vert{
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: var(--display);
+    font-size: 17px;
+    letter-spacing: 0.12em;
+    transform: rotate(180deg);
+    white-space: nowrap;
+  }
+  .spine .ticks{
+    display:flex; flex-direction:column; gap:18px; align-items:center;
+  }
+  .spine .ticks span{
+    width: 12px; height: 1px; background: var(--hairline);
+  }
+  .spine .ticks span.lit{ background: var(--signal); width: 18px; }
+  .spine .coords{
+    font-family: var(--mono); font-size: 9px; color: var(--grey);
+    writing-mode: vertical-rl; letter-spacing: 0.08em;
+  }
+
+  .page{
+    margin-left: 64px;
+  }
+
+  /* ===== NAV ===== */
+  .nav{
+    position: sticky; top:0;
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 22px 40px;
+    background: rgba(19,17,15,0.85);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--hairline);
+    z-index: 40;
+  }
+  .nav .role{
+    font-family: var(--mono); font-size: 12px; color: var(--bone-dim); letter-spacing:0.04em;
+  }
+  .nav ul{ display:flex; gap: 28px; list-style:none; }
+  .nav ul a{
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;
+    color: var(--bone-dim);
+    transition: color .2s;
+  }
+  .nav ul a:hover{ color: var(--signal); }
+
+  /* ===== HERO ===== */
+  .hero{
+    padding: 110px 56px 90px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .hero .eyebrow{
+    font-family: var(--mono); font-size: 13px; color: var(--signal);
+    letter-spacing: 0.12em; margin-bottom: 22px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .hero .eyebrow::before{
+    content:''; width:8px; height:8px; background:var(--signal); border-radius:50%;
+    box-shadow: 0 0 0 4px rgba(255,90,31,0.15);
+  }
+  .hero h1{
+    font-family: var(--display);
+    font-size: clamp(48px, 9vw, 118px);
+    line-height: 0.96;
+    letter-spacing: -0.01em;
+    max-width: 1100px;
+  }
+  .hero h1 .accent{ color: var(--signal); }
+  .hero .sub{
+    margin-top: 30px;
+    max-width: 560px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--bone-dim);
+  }
+  .hero-top{
+    display:flex; justify-content:space-between; align-items:flex-start; gap: 40px;
+  }
+  .hero-photo{
+    width: 168px; height: 168px;
+    flex-shrink: 0;
+    border: 1px solid var(--hairline);
+    position: relative;
+    overflow: hidden;
+    background: #1c1a17;
+  }
+  .hero-photo img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    filter: grayscale(15%) contrast(1.05);
+  }
+  .hero-photo .corner{
+    position:absolute; top:8px; right:8px;
+    width:8px; height:8px; border-top:1.5px solid var(--signal); border-right:1.5px solid var(--signal);
+  }
+  .hero-photo .placeholder-label{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size: 10px; color: var(--grey); text-align:center; padding: 12px;
+    line-height:1.5;
+  }
+  .hero .meta-row{
+    margin-top: 48px;
+    display:flex; gap: 48px; flex-wrap: wrap;
+  }
+  .meta-row .item{
+    font-family: var(--mono); font-size: 12px; color: var(--grey);
+  }
+  .meta-row .item strong{
+    display:block; font-family: var(--body); font-size: 15px; color: var(--bone); font-weight:600; margin-top:4px;
+  }
+
+  /* ===== SECTION LABELS ===== */
+  .section-head{
+    display:flex; align-items:baseline; gap:16px;
+    padding: 0 56px; margin: 0 0 36px;
+  }
+  .section-head .tag{
+    font-family: var(--mono); font-size: 12px; color: var(--signal); letter-spacing:0.1em;
+  }
+  .section-head h2{
+    font-family: var(--display); font-size: 28px; letter-spacing: -0.01em;
+  }
+  .section-head .rule{
+    flex:1; height:1px; background: var(--hairline);
+  }
+
+  section{ padding: 90px 0; }
+
+  /* ===== WORK GRID ===== */
+  .work-grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid var(--hairline);
+  }
+  .work-tile{
+    position:relative;
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    padding: 48px 44px;
+    min-height: 320px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    transition: background .25s ease;
+    cursor: pointer;
+  }
+  .work-tile:nth-child(2n){ border-right: none; }
+  .work-tile:hover{ background: rgba(255,90,31,0.05); }
+  .work-tile .frame{
+    height: 130px;
+    border: 1px dashed var(--hairline);
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size: 11px; color: var(--grey);
+    letter-spacing: 0.06em;
+  }
+  .work-tile .num{
+    font-family: var(--mono); font-size: 12px; color: var(--grey); margin-bottom: 18px; display:block;
+  }
+  .work-tile h3{
+    font-family: var(--display); font-size: 26px; margin-top: 26px; letter-spacing: -0.01em;
+  }
+  .work-tile p{
+    font-size: 14px; color: var(--bone-dim); margin-top: 10px; max-width: 380px; line-height:1.55;
+  }
+  .work-tile .tags{
+    display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;
+  }
+  .work-tile .tags span{
+    font-family: var(--mono); font-size: 10px; color: var(--sage);
+    border: 1px solid rgba(138,154,126,0.3);
+    padding: 4px 9px; border-radius: 2px;
+  }
+
+  /* ===== ABOUT ===== */
+  .about-body{
+    padding: 0 56px;
+    display:grid; grid-template-columns: 1.3fr 0.7fr; gap: 64px;
+  }
+  .about-body .lead{
+    font-size: 22px; line-height: 1.55; color: var(--bone);
+    font-weight: 400;
+  }
+  .about-body .lead strong{ color: var(--signal); font-weight: 600; }
+  .about-body .stats{
+    display:flex; flex-direction:column; gap: 26px;
+    border-left: 1px solid var(--hairline);
+    padding-left: 32px;
+  }
+  .stats .stat strong{
+    font-family: var(--display); font-size: 36px; display:block; color: var(--bone);
+  }
+  .stats .stat span{
+    font-family: var(--mono); font-size: 11px; color: var(--grey); letter-spacing: 0.06em;
+  }
+
+  /* ===== SKILLS / TOOLS strip ===== */
+  .strip{
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    padding: 30px 56px;
+    display:flex; gap: 36px; flex-wrap:wrap;
+    font-family: var(--mono); font-size: 13px; color: var(--bone-dim);
+  }
+  .strip span::before{ content:'·'; color: var(--signal); margin-right: 10px; }
+  .strip span:first-child::before{ content:''; margin-right:0; }
+
+  /* ===== CONTACT ===== */
+  .contact{
+    padding: 110px 56px 70px;
+    display:flex; flex-direction:column; align-items:flex-start;
+  }
+  .contact .tag{
+    font-family: var(--mono); font-size: 12px; color: var(--signal); letter-spacing:0.1em; margin-bottom:20px;
+  }
+  .contact h2{
+    font-family: var(--display);
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 1.02;
+    max-width: 900px;
+  }
+  .contact .email-link{
+    margin-top: 36px;
+    font-family: var(--mono); font-size: 18px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--signal);
+    color: var(--signal);
+  }
+  .contact .channels{
+    margin-top: 50px; display:flex; gap: 32px;
+  }
+  .contact .channels a{
+    font-family: var(--mono); font-size: 12px; color: var(--bone-dim);
+    border: 1px solid var(--hairline); padding: 10px 18px;
+    transition: border-color .2s, color .2s;
+  }
+  .contact .channels a:hover{ border-color: var(--signal); color: var(--signal); }
+
+  footer{
+    padding: 28px 56px;
+    border-top: 1px solid var(--hairline);
+    display:flex; justify-content:space-between;
+    font-family: var(--mono); font-size: 11px; color: var(--grey);
+  }
+
+  /* ===== Reveal on scroll ===== */
+  .reveal{
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .reveal.in{ opacity:1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 860px){
+    .spine{ display:none; }
+    .page{ margin-left:0; }
+    .nav{ padding: 18px 22px; }
+    .nav ul{ gap:16px; }
+    .hero{ padding: 70px 22px 60px; }
+    .hero-top{ flex-direction: column-reverse; gap: 24px; }
+    .hero-photo{ width: 96px; height: 96px; }
+    .section-head{ padding: 0 22px; }
+    .about-body{ padding:0 22px; grid-template-columns: 1fr; gap: 36px; }
+    .about-body .stats{ border-left:none; padding-left:0; flex-direction:row; flex-wrap:wrap; gap:28px; border-top:1px solid var(--hairline); padding-top:24px; }
+    .work-grid{ grid-template-columns: 1fr; }
+    .work-tile{ border-right:none !important; }
+    .strip{ padding: 24px 22px; }
+    .contact{ padding: 70px 22px 50px; }
+    footer{ padding: 22px; flex-direction:column; gap:8px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#work" class="skip-link">Skip to work</a>
+
+<!-- Signature spine element -->
+<div class="spine" aria-hidden="true">
+  <div class="mark">PV</div>
+  <div class="ticks">
+    <span class="lit"></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="name-vert">PAVAN</div>
+  <div class="coords">N 12.97° · BLR</div>
+</div>
+
+<div class="page">
+
+  <nav class="nav">
+    <span class="role">Pavan — Developer & Designer</span>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="eyebrow">AVAILABLE FOR NEW PROJECTS — Q3 2026</div>
+        <h1>Design that<br>holds its <span class="accent">edge.</span></h1>
+        <p class="sub">I'm Pavan — a developer and designer who builds products
+          end to end, from the first sketch to shipped code. Replace this line
+          with your own one-breath pitch.</p>
+      </div>
+      <div class="hero-photo">
+        <!-- Replace this placeholder with: <img src="your-photo.jpg" alt="Pavan"> -->
+        <div class="placeholder-label">YOUR<br>PHOTO<br>HERE</div>
+        <div class="corner"></div>
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="item">BASED IN<strong>Bengaluru, IN</strong></div>
+      <div class="item">EXPERIENCE<strong>6 years</strong></div>
+      <div class="item">FOCUS<strong>Dev · Design · UI</strong></div>
+      <div class="item">STATUS<strong>Open to work</strong></div>
+    </div>
+  </header>
+
+  <section id="work">
+    <div class="section-head">
+      <span class="tag">SELECTED WORK</span>
+      <h2>04 Projects</h2>
+      <div class="rule"></div>
+    </div>
+
+    <div class="work-grid">
+      <div class="work-tile reveal" tabindex="0">
+        <div>
+          <span class="num">01 / IDENTITY</span>
+          <div class="frame">PROJECT IMAGE — REPLACE ME</div>
+        </div>
+        <div>
+          <h3>Northbound Coffee</h3>
+          <p>Full identity system for a roastery — wordmark, packaging, and a
+            print-led launch kit. Placeholder description, swap with your own.</p>
+          <div class="tags"><span>Branding</span><span>Packaging</span><span>2025</span></div>
+        </div>
+      </div>
+
+      <div class="work-tile reveal" tabindex="0">
+        <div>
+          <span class="num">02 / DIGITAL</span>
+          <div class="frame">PROJECT IMAGE — REPLACE ME</div>
+        </div>
+        <div>
+          <h3>Ledger, a finance app</h3>
+          <p>Designed and built the UI from scratch — components, motion, and the
+            React front-end. Placeholder description, swap with your own.</p>
+          <div class="tags"><span>UI/UX</span><span>Design System</span><span>2024</span></div>
+        </div>
+      </div>
+
+      <div class="work-tile reveal" tabindex="0">
+        <div>
+          <span class="num">03 / PRINT</span>
+          <div class="frame">PROJECT IMAGE — REPLACE ME</div>
+        </div>
+        <div>
+          <h3>Field Notes Journal</h3>
+          <p>Editorial layout and cover series for a quarterly print journal.
+            Placeholder description, swap with your own.</p>
+          <div class="tags"><span>Editorial</span><span>Print</span><span>2023</span></div>
+        </div>
+      </div>
+
+      <div class="work-tile reveal" tabindex="0">
+        <div>
+          <span class="num">04 / EVENT</span>
+          <div class="frame">PROJECT IMAGE — REPLACE ME</div>
+        </div>
+        <div>
+          <h3>Signal Festival '25</h3>
+          <p>Wayfinding, signage, and motion graphics for a three-day design
+            festival. Placeholder description, swap with your own.</p>
+          <div class="tags"><span>Environmental</span><span>Motion</span><span>2025</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="section-head">
+      <span class="tag">ABOUT</span>
+      <h2>The short version</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="about-body">
+      <p class="lead reveal">
+        I'm Pavan — I work across <strong>design and code</strong>, which means
+        I can take an idea from a sketch to a working product without losing
+        the original intent in translation. This paragraph is a placeholder:
+        write two or three sentences about how you work and what you're drawn to.
+      </p>
+      <div class="stats reveal">
+        <div class="stat"><strong>40+</strong><span>PROJECTS SHIPPED</span></div>
+        <div class="stat"><strong>12</strong><span>INDUSTRIES</span></div>
+        <div class="stat"><strong>6</strong><span>YEARS</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip">
+    <span>FIGMA</span><span>REACT</span><span>ADOBE CC</span>
+    <span>NODE.JS</span><span>WEBFLOW</span><span>PYTHON</span>
+  </div>
+
+  <section id="contact">
+    <div class="contact">
+      <span class="tag">GET IN TOUCH</span>
+      <h2 class="reveal">Got a project<br>worth designing well?</h2>
+      <a class="email-link" href="mailto:hello@pavan.dev">hello@pavan.dev</a>
+      <div class="channels">
+        <a href="#">Instagram</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Behance</a>
+        <a href="#">Resume (PDF)</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 PAVAN</span>
+    <span>BUILT WITH CARE — REPLACE THIS FOOTER LINE TOO</span>
+  </footer>
+
+</div>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); } });
+  }, { threshold: 0.15 });
+  els.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
